@@ -1,0 +1,51 @@
+{% extends "coderedcms/pages/base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+<div class="vendor-index">
+    <h1>Vendors</h1>
+
+    <div class="vendor-list">
+        {% for vendor in page.get_children %}
+        <div class="vendor-card">
+            {% if vendor.specific.image %}
+            {% image vendor.specific.image fill-300x200 as vendor_image %}
+            <div class="vendor-image">
+                <a href="{% pageurl vendor %}">
+                    <img src="{{ vendor_image.url }}" alt="{{ vendor_image.alt }}">
+                </a>
+            </div>
+            {% endif %}
+            <div class="vendor-content">
+                <h2><a href="{% pageurl vendor %}">{{ vendor.specific.name }}</a></h2>
+                <p>{{ vendor.specific.category }}</p>
+                <p>{{ vendor.specific.country }}</p>
+                {% if vendor.specific.is_active %}
+                <p>Status: Active</p>
+                {% else %}
+                <p>Status: Inactive</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if page.paginator.num_pages > 1 %}
+    <div class="pagination">
+        {% if page.has_previous %}
+        <a href="?page={{ page.previous_page_number }}">Previous</a>
+        {% endif %}
+        {% for num in page.paginator.page_range %}
+        {% if num == page.number %}
+        <span class="current">{{ num }}</span>
+        {% else %}
+        <a href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+        {% endfor %}
+        {% if page.has_next %}
+        <a href="?page={{ page.next_page_number }}">Next</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

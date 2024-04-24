@@ -1,0 +1,31 @@
+{% extends "coderedcms/pages/base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+  <div class="vendor-page">
+    <h1>{{ page.name }}</h1>
+    <div class="vendor-info">
+      <p><strong>Categories:</strong>
+        {% for category in page.categories.all %}
+          {{ category.name }}
+          {% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      <p><strong>Country:</strong> {{ page.country }}</p>
+      <p><strong>City:</strong> {{ page.city }}</p>
+      <p><strong>Vendor Owner:</strong> {{ page.vendor_owner }}</p>
+      {% if page.is_active %}
+        <p><strong>Status:</strong> Active</p>
+      {% else %}
+        <p><strong>Status:</strong> Inactive</p>
+      {% endif %}
+      {% if page.admin_deactivated %}
+        <p><strong>Note:</strong> This vendor has been deactivated by an admin.</p>
+      {% endif %}
+    </div>
+    {% if page.content %}
+      <div class="vendor-content">
+        {{ page.content|richtext }}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
